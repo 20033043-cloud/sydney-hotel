@@ -15,7 +15,13 @@ namespace SydneyHotel
             public string roomService { get; set; }
             public double totalPrice { get; set; }
 
+            // NEW FIELDS
+            public DateTime checkInDate { get; set; }
+            public DateTime checkInTime { get; set; }
+            public DateTime checkOutTime { get; set; }
+            public bool isCheckedIn { get; set; }
         }
+
         // calulation of room services
         //Pujan Budathoki
         static double Price(int night, string isRoomService)
@@ -36,7 +42,8 @@ namespace SydneyHotel
         }
         static void Main(string[] args)
         {
-            Console.WriteLine(".................Welcome to Sydney Hotel...............");
+            Console.WriteLine("Welcome to Sydney Grand Hotel Reservation System");
+            Console.WriteLine("Date: " + DateTime.Now.ToShortDateString());
             Console.Write("\nEnter no. of Customer: ");
             int n = Convert.ToInt32(Console.ReadLine());
             Console.WriteLine("\n--------------------------------------------------------------------\n");
@@ -49,8 +56,17 @@ namespace SydneyHotel
                 Console.Write("Enter customer name: ");
                 rd[i].customerName = Console.ReadLine();
 
+                Console.Write("Enter check-in date (yyyy-mm-dd): ");
+                rd[i].checkInDate = DateTime.Parse(Console.ReadLine());
+
+                Console.Write("Enter check-in time (HH:mm): ");
+                rd[i].checkInTime = DateTime.Parse(Console.ReadLine());
+
+
                 Console.Write("Enter the number of nights: ");
                 rd[i].nights = Convert.ToInt32(Console.ReadLine());
+                rd[i].checkOutTime = rd[i].checkInDate.AddDays(rd[i].nights);
+
                 if (!(rd[i].nights > 0) && (rd[i].nights <= 20))
                 {
                     Console.Write("Number of nights in between 1 to 20: ");
@@ -66,6 +82,10 @@ namespace SydneyHotel
                 Console.WriteLine($"The total price from {rd[i].customerName} is ${rd[i].totalPrice}");
                 Console.WriteLine("\n--------------------------------------------------------------------");
 
+                Console.Write("Has the customer checked in? (yes/no): ");
+                string status = Console.ReadLine().ToLower();
+                rd[i].isCheckedIn = status == "yes";
+
             }
 
             var (minPrice, minindex) = rd.Select(x => x.totalPrice).Select((m, i) => (m, i)).Min();
@@ -74,16 +94,29 @@ namespace SydneyHotel
             ReservationDetail maxrd = rd[maxindex];
             ReservationDetail minrd = rd[minindex];
 
-            Console.WriteLine("\n\t\t\t\tSummary of reservation");
-            Console.WriteLine("--------------------------------------------------------------------\n");
-            Console.WriteLine("Name\t\tNumber of nights\t\tRoom service\t\tCharge");
-            Console.WriteLine($"{minrd.customerName}\t\t\t{minrd.nights}\t\t\t{minrd.roomService}\t\t\t{minrd.totalPrice}");
-            Console.WriteLine($"{maxrd.customerName}\t\t{maxrd.nights}\t\t\t{maxrd.roomService}\t\t\t{maxrd.totalPrice}");
-            Console.WriteLine("\n--------------------------------------------------------------------\n");
-            Console.WriteLine($"The customer spending most is {maxrd.customerName} ${maxrd.totalPrice}");
-            Console.WriteLine($"The customer spending least is {minrd.customerName} ${minrd.totalPrice}");
-            Console.WriteLine($"Press any key to continue....");
-            Console.ReadLine();
+
+            Console.WriteLine("\n\t\t\t\tSummary of Reservations");
+            Console.WriteLine("--------------------------------------------------------------------------------");
+            Console.WriteLine("Name\tCheck-in Date\tCheck-in Time\tCheck-out Date\tCheck-out Time\tStatus\t\tCharge");
+
+            for (int i = 0; i < rd.Length; i++)
+            {
+                Console.WriteLine(
+                    $"{rd[i].customerName}\t" +
+                    $"{rd[i].checkInDate:dd/MM/yyyy}\t" +
+                    $"{rd[i].checkInTime:hh:mm tt}\t" +
+                    $"{rd[i].checkOutTime:dd/MM/yyyy}\t" +
+                    $"{rd[i].checkOutTime:hh:mm tt}\t" +
+                    $"{(rd[i].isCheckedIn ? "Checked In" : "Not Checked In")}\t" +
+                    $"${rd[i].totalPrice}"
+                );
+            }
+
+            Console.WriteLine("--------------------------------------------------------------------------------");
+
+
+            Console.WriteLine("\n---------------------------------------------------------------------------------------------\n");
+
 
         }
     }
