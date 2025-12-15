@@ -42,7 +42,7 @@ namespace SydneyHotel
         }
         static void Main(string[] args)
         {
-            Console.WriteLine("Welcome to Sydney Grand Hotel Reservation System ");
+            Console.WriteLine("Welcome to Sydney Grand Hotel ");
             Console.WriteLine("Date: " + DateTime.Now.ToShortDateString());
             Console.Write("\nEnter no. of Customer: ");
             int n = Convert.ToInt32(Console.ReadLine());
